@@ -1,12 +1,13 @@
+# frozen_string_literal: true
+
 require 'base64'
 require 'openssl'
 require 'uri'
 
 class OAuth
   class << self
-
-    EMPTY_STRING = ''.freeze
-    SHA_BITS = '256'.freeze
+    EMPTY_STRING = ''
+    SHA_BITS = '256'
 
     # Creates a Mastercard API compliant OAuth Authorization header
     #
@@ -53,17 +54,17 @@ class OAuth
       query_pairs = {}
       pairs = query_params.split('&').sort_by(&:downcase)
 
-      pairs.each { |pair|
+      pairs.each do |pair|
         idx = pair.index('=')
-        key = idx > 0 ? pair[0..(idx - 1)] : pair
+        key = idx.positive? ? pair[0..(idx - 1)] : pair
         query_pairs[key] = [] unless query_pairs.include?(key)
-        value = if idx > 0 && pair.length > idx + 1
+        value = if idx.positive? && pair.length > idx + 1
                   pair[(idx + 1)..pair.length]
                 else
                   EMPTY_STRING
                 end
         query_pairs[key].push(value)
-      }
+      end
       query_pairs
     end
 
@@ -93,11 +94,11 @@ class OAuth
     #
     def get_authorization_string(oauth_params)
       header = 'OAuth '
-      oauth_params.each {|entry|
+      oauth_params.each do |entry|
         entry_key = entry[0]
         entry_val = entry[1]
         header = "#{header}#{entry_key}=\"#{entry_val}\","
-      }
+      end
       # Remove trailing ,
       header.slice(0, header.length - 1)
     end
@@ -114,8 +115,8 @@ class OAuth
       # Lowercase scheme and authority
       # Remove redundant port, query, and fragment
       base_uri = "#{url.scheme.downcase}://#{url.host.downcase}"
-      base_uri += ":#{url.port}" if url.scheme.downcase == "https" and url.port != 443
-      base_uri += ":#{url.port}" if url.scheme.downcase == "http" and url.port != 80
+      base_uri += ":#{url.port}" if (url.scheme.downcase == 'https') && (url.port != 443)
+      base_uri += ":#{url.port}" if (url.scheme.downcase == 'http') && (url.port != 80)
       base_uri += "/#{url.path[1..-1]}"
     end
 
@@ -131,7 +132,7 @@ class OAuth
       consolidated_params = {}.merge(query_params_map)
 
       # Add OAuth params to consolidated params map
-      oauth_param_map.each {|entry|
+      oauth_param_map.each do |entry|
         entry_key = entry[0]
         entry_val = entry[1]
         consolidated_params[entry_key] =
@@ -140,8 +141,9 @@ class OAuth
           else
             [].push(entry_val)
           end
-      }
+      end
 
+      consolidated_params = consolidated_params.sort_by { |k, _| k }.to_h
       oauth_params = ''
 
       # Add all parameters to the parameter string for signing
@@ -159,9 +161,7 @@ class OAuth
 
       # Remove trailing ampersand
       string_length = oauth_params.length - 1
-      if oauth_params.end_with?('&')
-        oauth_params = oauth_params.slice(0, string_length)
-      end
+      oauth_params = oauth_params.slice(0, string_length) if oauth_params.end_with?('&')
 
       oauth_params
     end
@@ -198,7 +198,7 @@ class OAuth
     #
     # noinspection RubyArgCount
     def OAuth.sign_signature_base_string(sbs, signing_key)
-      digest = OpenSSL::Digest::SHA256.new
+      digest = OpenSSL::Digest.new('SHA256')
       rsa_key = OpenSSL::PKey::RSA.new signing_key
 
       signature = ''

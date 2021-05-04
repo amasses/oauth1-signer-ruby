@@ -25,7 +25,7 @@ class TestGetSignatureBaseString < Minitest::Test
 
     sbs = OAuth.get_signature_base_string(http_method, "https://example.com", param_string)
 
-    assert(sbs.include? "GET&https%3A%2F%2Fexample.com&param%3Dtoken1%253Atoken2");
+    assert(sbs.include? "oauth_version%3D1.0%26param%3Dtoken1%253Atoken2");
   end
 
     def test_creates_a_correctly_constructed_and_escaped_signature_base_string_given_decoded_params
@@ -39,7 +39,7 @@ class TestGetSignatureBaseString < Minitest::Test
 
       sbs = OAuth.get_signature_base_string(http_method, "https://example.com", param_string)
 
-      assert(sbs.include? "GET&https%3A%2F%2Fexample.com&param%3Dtoken1%3Atoken2");
+      assert(sbs.include? "oauth_version%3D1.0%26param%3Dtoken1%3Atoken2");
     end
 
 end

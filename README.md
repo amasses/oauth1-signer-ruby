@@ -112,4 +112,4 @@ serviceApi.call opts
 // ...
 ```
 
-See also: https://www.rubydoc.info/github/typhoeus/typhoeus/Typhoeus.before
+See also: https://rubydoc.info/github/typhoeus/typhoeus/frames/Typhoeus#before-class_method

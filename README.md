@@ -82,10 +82,10 @@ Generators currently supported:
 
 Client libraries can be generated using the following command:
 ```shell
-java -jar openapi-generator-cli.jar generate -i openapi-spec.yaml -g ruby -o out
+openapi-generator-cli generate -i openapi-spec.yaml -g ruby -o out
 ```
 See also: 
-* [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
+* [OpenAPI Generator CLI Installation](https://openapi-generator.tech/docs/installation/)
 * [CONFIG OPTIONS for ruby](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/ruby.md)
 
 ##### Callback method `Typhoeus.before`
@@ -109,7 +109,7 @@ serviceApi = service.ServiceApi.new api_client
 
 opts = {}
 serviceApi.call opts
-// ...
+// …
 ```
 
 See also: https://rubydoc.info/github/typhoeus/typhoeus/frames/Typhoeus#before-class_method

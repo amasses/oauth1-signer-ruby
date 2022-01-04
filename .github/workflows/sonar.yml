@@ -1,15 +1,15 @@
 name: Sonar
-
-on:
+'on':
   push:
-    branches: [ main ]
+    branches:
+      - "**"
   pull_request_target:
     branches:
-      - main
+      - "**"
     types: [opened, synchronize, reopened, labeled]
   schedule:
-    - cron: "0 16 * * *"
-
+    - cron: 0 16 * * *
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest

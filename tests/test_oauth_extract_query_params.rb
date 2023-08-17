@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../lib/oauth'
+require_relative '../lib/mastercard/oauth'
 
 class TestOAuthExtractQueryParams < Minitest::Test
 
@@ -8,7 +8,7 @@ class TestOAuthExtractQueryParams < Minitest::Test
 
   def setup
    @test_href = "HTTPS://SANDBOX.api.mastercard.com/merchantid/v1/merchantid?MerchantId=GOOGLE%20LTD%20ADWORDS%20%28CC%40GOOGLE.COM%29&Format=XML&Type=ExactMatch&Format=JSON"
-   @query_params = OAuth.extract_query_params(@test_href)
+   @query_params = Mastercard::OAuth.extract_query_params(@test_href)
   end
 
   def test_should_return_a_map
@@ -43,7 +43,7 @@ class TestOAuthExtractQueryParams < Minitest::Test
 
   def test_extract_query_params_should_support_rfc_example_when_uri_created_from_uri_string
     href = 'https://example.com/request?b5=%3D%253D&a3=a&c%40=&a2=r%20b'
-    params = OAuth.extract_query_params(href)
+    params = Mastercard::OAuth.extract_query_params(href)
 
     assert_equal params['b5'], ['%3D%253D']
     assert_equal params['a3'], ['a']
@@ -53,7 +53,7 @@ class TestOAuthExtractQueryParams < Minitest::Test
 
   def test_extract_query_params_should_support_rfc_example_when_uri_created_from_components
     uri = URI::HTTPS.build(host: 'example.com', query: 'b5=%3D%253D&a3=a&c%40=&a2=r%20b').to_s
-    params = OAuth.extract_query_params(uri)
+    params = Mastercard::OAuth.extract_query_params(uri)
 
     assert_equal params['b5'], ['%3D%253D']
     assert_equal params['a3'], ['a']
@@ -63,7 +63,7 @@ class TestOAuthExtractQueryParams < Minitest::Test
 
   def test_extract_query_params_should_not_encode_params_when_uri_created_from_string_with_decoded_params
     href = 'https://example.com/request?colon=:&plus=+&comma=,'
-    params = OAuth.extract_query_params(href)
+    params = Mastercard::OAuth.extract_query_params(href)
 
     assert_equal params['colon'], [':']
     assert_equal params['plus'], ['+']

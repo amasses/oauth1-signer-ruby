@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/mock'
-require_relative '../lib/oauth'
+require_relative '../lib/mastercard/oauth'
 
 class TestGetNonce < Minitest::Test
 
@@ -9,7 +9,7 @@ class TestGetNonce < Minitest::Test
 
   def test_creates_UUID_with_dashes_removed
 
-    nonce = OAuth.get_nonce
+    nonce = Mastercard::OAuth.get_nonce
 
     assert_equal(nonce.length, NONCE_LENGTH)
     assert_equal(VALID_CHARS.match?(nonce), true)

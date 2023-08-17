@@ -3,6 +3,7 @@
 require 'base64'
 require 'openssl'
 require 'uri'
+require 'securerandom'
 
 class OAuth
   class << self
@@ -220,7 +221,7 @@ class OAuth
     #
     def get_body_hash(payload)
       # Base 64 encodes the SHA1 digest of payload
-      Base64.strict_encode64(Digest::SHA256.digest(payload.nil? ? '' : payload))
+      Base64.strict_encode64(OpenSSL::Digest.new('SHA256').digest(payload.nil? ? '' : payload))
     end
 
     #
@@ -238,8 +239,7 @@ class OAuth
     #
     def get_nonce(len = 32)
       # Returns a random string of length=len
-      o = [('a'..'z'), ('A'..'Z'), (0..9)].map(&:to_a).flatten
-      (0...len).map { o[rand(o.length)] }.join
+      SecureRandom.alphanumeric(len)
     end
 
     # Returns UNIX Timestamp as required per
@@ -247,7 +247,7 @@ class OAuth
     # @return {String} UNIX timestamp (UTC)
     #
     def time_stamp
-      Time.now.getutc.to_i
+      Time.now.to_i
     end
   end
 end

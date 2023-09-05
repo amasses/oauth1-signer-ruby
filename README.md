@@ -56,7 +56,7 @@ signing_key = OpenSSL::PKCS12.new(is, "<insert key password>").key;
 ```
 
 ### Creating the OAuth Authorization Header
-The method that does all the heavy lifting is `OAuth.get_authorization_header`. You can call into it directly and as long as you provide the correct parameters, it will return a string that you can add into your request's `Authorization` header.
+The method that does all the heavy lifting is `Mastercard::OAuth.get_authorization_header`. You can call into it directly and as long as you provide the correct parameters, it will return a string that you can add into your request's `Authorization` header.
 
 ```ruby
 require 'oauth'
@@ -65,7 +65,7 @@ consumer_key = "<insert consumer key>";
 uri = "https://sandbox.api.mastercard.com/service";
 method = "POST";
 payload = "Hello world!";
-authHeader = OAuth.get_authorization_header(uri, method, payload, consumer_key, signing_key);
+authHeader = Mastercard::OAuth.get_authorization_header(uri, method, payload, consumer_key, signing_key);
 ```
 
 ### Integrating with OpenAPI Generator API Client Libraries <a name="integrating-with-openapi-generator-api-client-libraries"></a>
@@ -100,7 +100,7 @@ api_client.config = config
 
 Typhoeus.before { |request|
   authHeader =
-      OAuth.get_authorization_header request.base_url, request.options[:method],
+      Mastercard::OAuth.get_authorization_header request.base_url, request.options[:method],
                                      request.options[:body], consumer_key, signing_key.key
   request.options[:headers] = request.options[:headers].merge({'Authorization' => authHeader})
 }
